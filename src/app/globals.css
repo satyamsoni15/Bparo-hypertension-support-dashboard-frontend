@@ -1,0 +1,483 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  /* Two typefaces only — see src/app/fonts.ts. */
+  --font-sans: var(--font-dm-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-heading: var(--font-manrope), var(--font-dm-sans), ui-sans-serif, sans-serif;
+  /* No third monospace family: IDs/codes use DM Sans with tabular figures. */
+  --font-mono: var(--font-dm-sans), ui-sans-serif, sans-serif;
+  --tracking-tighter: -0.02em;
+  --tracking-tight: -0.012em;
+  --tracking-normal: -0.006em;
+  --tracking-wide: 0em;
+  --text-xs: 0.6875rem;
+  --text-xs--line-height: 1.4;
+  --text-sm: 0.8125rem;
+  --text-sm--line-height: 1.45;
+  --text-base: 0.875rem;
+  --text-base--line-height: 1.5;
+  --text-lg: 1rem;
+  --text-lg--line-height: 1.45;
+  --text-xl: 1.25rem;
+  --text-xl--line-height: 1.4;
+  --text-2xl: 1.5rem;
+  --text-2xl--line-height: 1.3;
+  --text-3xl: 1.8125rem;
+  --text-3xl--line-height: 1.25;
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
+
+  /* Marketing / landing page palette (BPARO Care homepage) — wired to the
+     --marketing-* custom properties below so both light and dark values
+     come from one place per token. */
+  /* Fixed, not theme-flipping — reference's own `text-cream` has no dark
+     override either: it's "near-white text on a colored/dark panel",
+     which stays near-white regardless of overall site theme. Only the
+     page canvas itself (bg-cream on <main>) is meant to flip; that one
+     spot references --marketing-background directly instead. */
+  --color-cream: #f8fafc;
+  --color-ink: var(--marketing-foreground);
+  --color-mktg-card: var(--marketing-card);
+  --color-teal: var(--marketing-primary);
+  --color-teal-deep: var(--marketing-deep);
+  --color-lime: var(--marketing-secondary);
+  --color-lime-soft: var(--marketing-tertiary);
+  --color-coral: var(--marketing-destructive);
+  --color-coral-soft: var(--marketing-destructive);
+  --color-mist: var(--marketing-sand);
+  --radius-xl2: 1.25rem;
+  --radius-xl3: 1.75rem;
+
+  /* Homepage blue & white theme — values live on .hp-theme below (light) and
+     .hp-theme.dark (dark), so `bg-hp-soft` etc. flip with the page toggle. */
+  --color-hp-bg: var(--hp-bg);
+  --color-hp-surface: var(--hp-surface);
+  --color-hp-soft: var(--hp-soft);
+  --color-hp-soft-2: var(--hp-soft-2);
+  --color-hp-line: var(--hp-line);
+  --color-hp-line-strong: var(--hp-line-strong);
+  --color-hp-heading: var(--hp-heading);
+  --color-hp-body: var(--hp-body);
+  --color-hp-muted: var(--hp-muted);
+  --color-hp-accent: var(--hp-accent);
+  --color-hp-accent-strong: var(--hp-accent-strong);
+  --color-hp-grad-from: var(--hp-grad-from);
+  --color-hp-grad-to: var(--hp-grad-to);
+  --color-hp-deep: var(--hp-deep);
+}
+
+/* Homepage (src/app/page.tsx) theme. Dark mode is scoped to the page's own
+   <main> (it carries .dark), so it never leaks into the signed-in app. */
+.hp-theme {
+  --hp-bg: #ffffff;
+  --hp-surface: #ffffff;
+  --hp-soft: #eff6ff;
+  --hp-soft-2: #dbeafe;
+  --hp-line: #dbeafe;
+  --hp-line-strong: #bfdbfe;
+  --hp-heading: #0b1f44;
+  --hp-body: #4a5b78;
+  --hp-muted: #6b7a94;
+  --hp-accent: #2563eb;
+  --hp-accent-strong: #1d4ed8;
+  --hp-grad-from: #1d4ed8;
+  --hp-grad-to: #3b82f6;
+  --hp-deep: #0a2254;
+  color-scheme: light;
+}
+.hp-theme.dark {
+  --hp-bg: #070f22;
+  --hp-surface: #0e1a33;
+  --hp-soft: #0b1630;
+  --hp-soft-2: #16284d;
+  --hp-line: #1c2d52;
+  --hp-line-strong: #2b4274;
+  --hp-heading: #eef4ff;
+  --hp-body: #a9b8d3;
+  --hp-muted: #7f8fae;
+  --hp-accent: #3b82f6;
+  --hp-accent-strong: #7fb0ff;
+  --hp-grad-from: #1e3a8a;
+  --hp-grad-to: #2563eb;
+  --hp-deep: #040a18;
+  color-scheme: dark;
+}
+
+/* Hero waves: each SVG is two identical wave periods wide, so sliding it by
+   half its width loops seamlessly. */
+.hp-wave {
+  width: 200%;
+  animation: hp-wave-slide var(--hp-wave-speed, 18s) linear infinite;
+}
+.hp-wave-reverse {
+  animation-direction: reverse;
+}
+.hp-pulse-line {
+  stroke-dasharray: 1400;
+  stroke-dashoffset: 1400;
+  animation: hp-pulse-draw 6s ease-in-out infinite;
+}
+@keyframes hp-wave-slide {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+@keyframes hp-pulse-draw {
+  0% { stroke-dashoffset: 1400; opacity: 0; }
+  10% { opacity: 1; }
+  60% { stroke-dashoffset: 0; opacity: 1; }
+  100% { stroke-dashoffset: 0; opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hp-wave, .hp-pulse-line { animation: none; }
+  .hp-pulse-line { stroke-dashoffset: 0; }
+}
+
+:root {
+  /* Atlassian-inspired neutral + brand palette */
+  --background: #ffffff;
+  --foreground: #172b4d;
+  --card: #ffffff;
+  --card-foreground: #172b4d;
+  --popover: #ffffff;
+  --popover-foreground: #172b4d;
+  --primary: #044595;
+  --primary-foreground: #ffffff;
+  --secondary: #f7f8f9;
+  --secondary-foreground: #172b4d;
+  --muted: #f7f8f9;
+  --muted-foreground: #626f86;
+  --accent: #e5edf9;
+  --accent-foreground: #044595;
+  --destructive: #ae2e24;
+  --border: #dcdfe4;
+  --input: #dcdfe4;
+  --ring: #044595;
+  --chart-1: #044595;
+  --chart-2: #2f3fa8;
+  --chart-3: #a54800;
+  --chart-4: #6e5dc6;
+  --chart-5: #ae2e24;
+  --radius: 0.1875rem;
+  --sidebar: #f7f8f9;
+  --sidebar-foreground: #172b4d;
+  --sidebar-primary: #044595;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #e5edf9;
+  --sidebar-accent-foreground: #044595;
+  --sidebar-border: #dcdfe4;
+  --sidebar-ring: #044595;
+
+  /* Marketing landing page (BPARO Care homepage) — light mode. Values
+     mirror the reference site's own CSS custom properties (same HSL
+     triplets) so colors, not just layout, match exactly. Kept separate
+     from the app's own --background/--primary/etc. above since the two
+     surfaces use different palettes. */
+  --marketing-background: hsl(220 33% 98%);
+  --marketing-foreground: hsl(225 32% 16%);
+  --marketing-card: hsl(0 0% 100%);
+  --marketing-primary: hsl(226 68% 58%);
+  --marketing-secondary: hsl(174 44% 70%);
+  --marketing-tertiary: hsl(232 64% 70%);
+  --marketing-accent: hsl(47 85% 72%);
+  --marketing-muted: hsl(222 32% 95%);
+  --marketing-muted-foreground: hsl(220 12% 47%);
+  --marketing-destructive: hsl(0 72% 61%);
+  --marketing-sand: #eef3fb;
+  /* Fixed near-black navy for "always dark" surfaces (footer, CTA button,
+     deep cards) — intentionally does NOT flip with the theme, since these
+     stay the deepest-contrast surface in both light and dark mode. */
+  --marketing-deep: #1d2538;
+}
+
+.dark {
+  --background: #161a1d;
+  --foreground: #dee4ea;
+  --card: #1d2125;
+  --card-foreground: #dee4ea;
+  --popover: #1d2125;
+  --popover-foreground: #dee4ea;
+  --primary: #2e6fd6;
+  --primary-foreground: #ffffff;
+  --secondary: #22272b;
+  --secondary-foreground: #dee4ea;
+  --muted: #22272b;
+  --muted-foreground: #8c9bab;
+  --accent: #123a52;
+  --accent-foreground: #5b9bf0;
+  --destructive: #f87462;
+  --border: #2c333a;
+  --input: #2c333a;
+  --ring: #2e6fd6;
+  --chart-1: #2e6fd6;
+  --chart-2: #6e7ff5;
+  --chart-3: #e2b203;
+  --chart-4: #9f8fef;
+  --chart-5: #f87462;
+  --sidebar: #1d2125;
+  --sidebar-foreground: #dee4ea;
+  --sidebar-primary: #2e6fd6;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #123a52;
+  --sidebar-accent-foreground: #5b9bf0;
+  --sidebar-border: #2c333a;
+  --sidebar-ring: #2e6fd6;
+
+  /* Marketing landing page — dark mode. */
+  --marketing-background: hsl(228 35% 10%);
+  --marketing-foreground: hsl(220 33% 96%);
+  --marketing-card: hsl(229 30% 14%);
+  --marketing-primary: hsl(226 70% 66%);
+  --marketing-secondary: hsl(174 42% 68%);
+  --marketing-tertiary: hsl(232 68% 73%);
+  --marketing-accent: hsl(47 85% 72%);
+  --marketing-muted: hsl(228 25% 21%);
+  --marketing-muted-foreground: hsl(220 17% 72%);
+  --marketing-destructive: hsl(0 72% 67%);
+  --marketing-sand: #192444;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground text-base tracking-normal antialiased;
+  }
+html {
+    @apply font-sans;
+    color-scheme: light;
+    transition: background-color 180ms ease, color 180ms ease;
+  }
+  h1,
+  h2,
+  h3,
+  h4 {
+    @apply font-heading tracking-tight font-semibold;
+  }
+  /* Tailwind v4 no longer sets a pointer cursor on buttons; restore it for everything clickable. */
+  a[href],
+  button:not(:disabled),
+  summary,
+  select:not(:disabled),
+  label[for],
+  input[type="checkbox"]:not(:disabled),
+  input[type="radio"]:not(:disabled),
+  input[type="file"]:not(:disabled),
+  input[type="submit"]:not(:disabled),
+  input[type="button"]:not(:disabled),
+  input[type="reset"]:not(:disabled),
+  input[type="color"]:not(:disabled),
+  [role="button"]:not([aria-disabled="true"]),
+  [role="tab"]:not([aria-disabled="true"]),
+  [role="link"],
+  [role="checkbox"]:not([aria-disabled="true"]),
+  [role="radio"]:not([aria-disabled="true"]),
+  [role="switch"]:not([aria-disabled="true"]),
+  [role="option"]:not([aria-disabled="true"]),
+  [role="menuitem"]:not([aria-disabled="true"]),
+  [role="menuitemcheckbox"]:not([aria-disabled="true"]),
+  [role="menuitemradio"]:not([aria-disabled="true"]),
+  [role="combobox"]:not([aria-disabled="true"]) {
+    cursor: pointer;
+  }
+  :disabled,
+  [aria-disabled="true"],
+  [data-disabled] {
+    cursor: not-allowed;
+  }
+}
+
+/* Marketing / landing page helpers (BPARO Care homepage) */
+.font-display {
+  font-family: var(--font-heading);
+}
+
+/* font-mono / <code> share DM Sans, so line digits up and keep 0 vs O clear. */
+.font-mono,
+code,
+kbd,
+samp,
+pre {
+  font-variant-numeric: tabular-nums slashed-zero;
+}
+
+.eyebrow {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.container-page {
+  max-width: 1180px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+}
+
+/* Workspace design tokens: shared rhythm, distinct role accents. */
+.portal-shell {
+  --background: #ffffff;
+  --foreground: #182940;
+  --primary: #2864d8;
+  --primary-foreground: #ffffff;
+  --accent: #edf3ff;
+  --accent-foreground: #245abf;
+  --secondary: #f1f5fa;
+  --secondary-foreground: #34445b;
+  --muted: #f1f5fa;
+  --muted-foreground: #607087;
+  --border: #e2e9f2;
+  --input: #d6e0eb;
+  --ring: #2864d8;
+  --radius: 0.75rem;
+  background:
+    radial-gradient(circle at 8% 5%, color-mix(in srgb, var(--primary) 9%, transparent), transparent 28rem),
+    radial-gradient(circle at 92% 96%, color-mix(in srgb, var(--accent) 75%, transparent), transparent 34rem),
+    #f3f6fb;
+  color: var(--foreground);
+  position: relative;
+  isolation: isolate;
+}
+.portal-doctor { --primary: #087f85; --accent: #e8f6f3; --accent-foreground: #07676c; --ring: #087f85; --role-glow: #22c7bd; }
+.portal-admin { --primary: #5551c7; --accent: #efeffd; --accent-foreground: #4945ab; --ring: #5551c7; --role-glow: #a99cff; }
+.portal-sidebar { background: var(--background); border-right: 1px solid var(--border); }
+.portal-sidebar { position: relative; box-shadow: 10px 0 36px -32px #17345b80; }
+.portal-sidebar::before { content: ""; position: absolute; inset: 0 0 auto; height: 5px; background: linear-gradient(90deg, var(--primary), var(--role-glow, #72a4ff), transparent); }
+.portal-sidebar nav a { min-height: 42px; transition: background 180ms, color 180ms, transform 180ms, box-shadow 180ms; }
+.portal-sidebar nav a:hover { transform: translateX(3px); }
+.portal-sidebar nav a[aria-current="page"] { background: linear-gradient(100deg, color-mix(in srgb, var(--accent) 92%, white), color-mix(in srgb, var(--accent) 55%, transparent)); color: var(--primary); box-shadow: inset 3px 0 var(--primary), 0 8px 20px -18px var(--primary); }
+.portal-shell > div > header { min-height: 76px; background: var(--background); }
+.portal-content { scrollbar-gutter: stable; scroll-behavior: smooth; }
+.portal-content > div { animation: workspace-enter 350ms ease-out both; }
+.portal-content > div > * { animation: content-rise 500ms ease both; }
+.portal-content h1 { font-size: clamp(1.5rem, 2.5vw, 2rem); letter-spacing: -.04em; }
+.portal-shell { --text-xs: .75rem; --text-sm: .875rem; --text-base: .9375rem; }
+.portal-content > div > h1 { padding-top: 8px; }
+.portal-content > div > h1 + p { max-width: 65ch; line-height: 1.7; }
+.portal-content :is(button, a)[class*="rounded-full"]:not([class*="h-7"]):not([class*="h-8"]):not([class*="w-7"]):not([class*="w-8"]) { border-radius: 12px; }
+.portal-shell :focus-visible { outline: 2px solid var(--primary); outline-offset: 3px; }
+body:has(.portal-shell) [data-slot="dialog-content"] { border-radius: 20px; padding: 24px; background: color-mix(in srgb, var(--background) 88%, transparent); backdrop-filter: blur(22px) saturate(150%); box-shadow: inset 0 1px #ffffffb8, 0 24px 90px -20px #10254955; }
+body:has(.portal-shell) [data-slot="dialog-footer"] { margin: 0 -24px -24px; padding: 18px 24px; }
+body:has(.portal-shell) [data-slot="dialog-overlay"] { background: #10233a40; backdrop-filter: blur(5px); }
+body:has(.portal-shell) [data-slot="dialog-content"] :is(input, select, textarea) { border-radius: 10px; }
+.portal-content :is(section, article, div).border.bg-background,
+.portal-content [data-slot="card"],
+.portal-panel,
+.portal-stat {
+  border-color: color-mix(in srgb, var(--border) 72%, white);
+  background: linear-gradient(135deg, color-mix(in srgb, var(--background) 92%, white) 0%, color-mix(in srgb, var(--background) 78%, transparent) 100%);
+  backdrop-filter: blur(18px) saturate(145%);
+  box-shadow: inset 0 1px 0 #ffffffb3, 0 14px 38px -26px #17345b73, 0 4px 14px -10px #17345b38;
+}
+[data-slot="card"] {
+  background: linear-gradient(135deg, color-mix(in srgb, var(--card) 94%, white), color-mix(in srgb, var(--card) 84%, transparent));
+  backdrop-filter: blur(16px) saturate(140%);
+  box-shadow: inset 0 1px 0 #ffffffa6, 0 12px 32px -24px #172d4f75, 0 3px 12px -9px #172d4f40;
+}
+.portal-content table th { background: var(--secondary); padding-top: 14px; padding-bottom: 14px; }
+.portal-content table tbody tr { transition: background 150ms; }
+.portal-content table tbody tr:hover { background: var(--accent); }
+.portal-content :is(input, select, textarea) { transition: border-color 150ms, box-shadow 150ms; }
+.portal-content [data-slot="tabs-list"] { border-radius: 14px; padding: 5px; height: auto; }
+.portal-content [data-slot="tabs-trigger"] { min-height: 36px; border-radius: 10px; }
+.portal-hero {
+  position: relative; overflow: hidden; isolation: isolate; padding: clamp(20px, 3vw, 32px);
+  border: 1px solid var(--border); border-radius: 24px;
+  background: linear-gradient(115deg, color-mix(in srgb, var(--background) 88%, transparent) 30%, color-mix(in srgb, var(--accent) 84%, transparent));
+  backdrop-filter: blur(20px) saturate(145%);
+  box-shadow: inset 0 1px #ffffffb8, 0 18px 42px -30px #17345b75, 0 0 0 1px color-mix(in srgb, var(--primary) 5%, transparent);
+  animation: hero-arrive 650ms cubic-bezier(.2,.75,.25,1) both;
+}
+.portal-hero::after {
+  content: ""; position: absolute; pointer-events: none; z-index: -1;
+  width: 280px; height: 280px; border: 42px solid var(--primary);
+  opacity: .035; border-radius: 50%; right: -70px; top: -120px;
+}
+.portal-eyebrow { font-size: 10px; text-transform: uppercase; letter-spacing: .16em; font-weight: 700; color: var(--primary); }
+.portal-panel { overflow: hidden; }
+.portal-stat { transition: transform 180ms, box-shadow 180ms; }
+.portal-stat:hover { transform: translateY(-3px); box-shadow: 0 12px 25px -15px #20365d40; }
+.portal-content .portal-stat:nth-child(2) { animation-delay: 60ms; }
+.portal-content .portal-stat:nth-child(3) { animation-delay: 120ms; }
+.portal-content .portal-stat:nth-child(4) { animation-delay: 180ms; }
+.portal-content .portal-stat:nth-child(5) { animation-delay: 240ms; }
+.portal-content .portal-stat:nth-child(6) { animation-delay: 300ms; }
+@keyframes content-rise { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes hero-arrive { from { opacity: 0; transform: translateY(14px) scale(.99); } to { opacity: 1; transform: translateY(0) scale(1); } }
+.dark .portal-shell {
+  --background: #182232; --foreground: #e8eef7; --primary: #85b1ff; --primary-foreground: #14223b;
+  --accent: #25344d; --accent-foreground: #aac9ff; --secondary: #202d40; --secondary-foreground: #d5deec;
+  --muted: #202d40; --muted-foreground: #a5b3c7; --border: #304057; --input: #3b4d66;
+  background: #111b2a;
+}
+.dark .portal-content :is(section, article, div).border.bg-background,
+.dark .portal-content [data-slot="card"],
+.dark .portal-panel,
+.dark .portal-stat,
+.dark [data-slot="card"] { border-color: #ffffff18; box-shadow: inset 0 1px #ffffff16, 0 16px 38px -26px #000000cc; }
+.dark { color-scheme: dark; }
+.dark .portal-content :is(section, article, div).border.bg-background,
+.dark .portal-content [data-slot="card"],
+.dark .portal-panel,
+.dark .portal-stat {
+  background: linear-gradient(135deg, color-mix(in srgb, var(--background) 96%, white) 0%, color-mix(in srgb, var(--background) 90%, transparent) 100%);
+}
+.dark .portal-hero {
+  background: linear-gradient(115deg, color-mix(in srgb, var(--background) 96%, white) 30%, color-mix(in srgb, var(--accent) 86%, transparent));
+}
+.dark .portal-doctor { --primary: #75d5ce; --accent: #203b3e; --accent-foreground: #9fe7df; }
+.dark .portal-admin { --primary: #b5afff; --accent: #302e4c; --accent-foreground: #cdc9ff; }
+@keyframes workspace-enter { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+@media (max-width: 639px) { .portal-shell > div > header { min-height: 64px; } }
+@media (prefers-reduced-motion: reduce) {
+  .portal-content { scroll-behavior: auto; }
+  .portal-content *, .portal-sidebar nav a { animation: none !important; transition: none !important; }
+  .portal-stat:hover, .portal-sidebar nav a:hover { transform: none; }
+}
+
+/* Homepage anchors land below the sticky header. */
+.hp-theme section[id] {
+  scroll-margin-top: 80px;
+}
